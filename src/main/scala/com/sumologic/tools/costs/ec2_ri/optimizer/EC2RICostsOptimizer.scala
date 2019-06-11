@@ -1,10 +1,10 @@
-package com.sumologic.ec2_ri_optimizer
+package com.sumologic.tools.costs.ec2_ri.optimizer
 
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.appsync.AWSAppSyncClientBuilder
 import com.amazonaws.services.appsync.model.ListApiKeysRequest
 
-object EC2RIOptimizer {
+object EC2RICostsOptimizer {
 
   def main(args: Array[String]) {
     val apiId = args(0)
