@@ -1,7 +1,7 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer.analizer
 
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2InstancesSummary
-import com.sumologic.tools.costs.ec2_ri.optimizer.ri.ReservedInstancesSummary
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstancesSummary
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -20,6 +20,6 @@ class Ec2RiAnalizer(ec2InstancesSummary: Ec2InstancesSummary, reservedInstancesS
       familiesSizeDiffs.put(family, sizeDiff)
     }
 
-    Ec2RiAnalysisSummary(familiesSizeDiffs.toMap)
+    Ec2RiAnalysis(familiesSizeDiffs.toMap)
   }
 }

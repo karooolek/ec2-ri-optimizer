@@ -4,9 +4,9 @@ import com.sumologic.tools.costs.ec2_ri.optimizer.analizer.Ec2RiAnalizer
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2Instance
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.aws.AwsEc2InstancesDownloader
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.Ec2InstancesSummarizer
-import com.sumologic.tools.costs.ri_ri.optimizer.ri.ReservedInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.summarizer.ReservedInstancesSummarizer
 import com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.aws.AwsReservedInstancesDownloader
-import com.sumologic.tools.costs.ri_ri.optimizer.ri.summarizer.ReservedInstancesSummarizer
 
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
@@ -53,10 +53,10 @@ object Main {
     println("TOTAL reserved instances summary:")
     println(totalReservedInstancesSummary.toJsonString)
 
-    val ec2RiAnalysisSummary = new Ec2RiAnalizer(totalEc2instancesSummary, totalReservedInstancesSummary).analize()
-    //    val ec2RiAnalysisSummary = new JsonEc2RiAnalizer(Source.fromFile("ec2_ri_analysis.json")).analize()
-    println("TOTAL running/reserved instances summary:")
-    println(ec2RiAnalysisSummary.toJsonString)
+    val ec2RiAnalysis = new Ec2RiAnalizer(totalEc2instancesSummary, totalReservedInstancesSummary).analize()
+    //    val ec2RiAnalysis = new JsonEc2RiAnalizer(Source.fromFile("ec2_ri_analysis.json")).analize()
+    println("TOTAL (reserved - running) instances analysis:")
+    println(ec2RiAnalysis.toJsonString)
 
   }
 }

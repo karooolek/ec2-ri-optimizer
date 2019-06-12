@@ -1,7 +1,6 @@
-package com.sumologic.tools.costs.ri_ri.optimizer.ri.summarizer
+package com.sumologic.tools.costs.ec2_ri.optimizer.reserved.summarizer
 
-import com.sumologic.tools.costs.ec2_ri.optimizer.ri.ReservedInstancesSummary
-import com.sumologic.tools.costs.ri_ri.optimizer.ri.ReservedInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.{ReservedInstance, ReservedInstancesSummary}
 
 class ReservedInstancesSummarizer(reservedInstances: Seq[ReservedInstance]) {
   def summarize(): ReservedInstancesSummary = {

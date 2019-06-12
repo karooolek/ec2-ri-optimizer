@@ -1,6 +1,6 @@
-package com.sumologic.tools.costs.ec2_ri.optimizer.ri.downloader.json
+package com.sumologic.tools.costs.ec2_ri.optimizer.reserved.downloader.json
 
-import com.sumologic.tools.costs.ri_ri.optimizer.ri.ReservedInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstance
 import com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.ReservedInstancesDownloader
 
 import scala.io.Source

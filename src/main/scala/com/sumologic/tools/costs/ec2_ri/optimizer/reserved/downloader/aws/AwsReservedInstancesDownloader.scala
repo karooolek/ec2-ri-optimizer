@@ -3,7 +3,7 @@ package com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.aws
 import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.ec2.AmazonEC2Client
-import com.sumologic.tools.costs.ri_ri.optimizer.ri.ReservedInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstance
 import com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.ReservedInstancesDownloader
 
 import scala.collection.JavaConverters._

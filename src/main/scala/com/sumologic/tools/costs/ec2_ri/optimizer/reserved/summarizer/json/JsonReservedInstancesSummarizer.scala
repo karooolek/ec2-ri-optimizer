@@ -1,7 +1,7 @@
-package com.sumologic.tools.costs.ri_ri.optimizer.ri.summarizer.json
+package com.sumologic.tools.costs.ec2_ri.optimizer.reserved.summarizer.json
 
-import com.sumologic.tools.costs.ec2_ri.optimizer.ri.ReservedInstancesSummary
-import com.sumologic.tools.costs.ri_ri.optimizer.ri.summarizer.ReservedInstancesSummarizer
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstancesSummary
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.summarizer.ReservedInstancesSummarizer
 
 import scala.io.Source
 
