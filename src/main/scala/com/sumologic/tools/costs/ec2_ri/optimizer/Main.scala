@@ -3,6 +3,7 @@ package com.sumologic.tools.costs.ec2_ri.optimizer
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2Instance
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.aws.AwsEc2InstancesDownloader
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.json.JsonEc2InstancesDownloader
+import com.sumologic.tools.costs.ec2_ri.optimizer.summarizer.Ec2InstancesSummary
 
 import scala.io.Source
 
@@ -30,6 +31,12 @@ object Main {
       for (ec2instance <- ec2instances) {
         println(ec2instance.toJsonString)
       }
+
+      println(Ec2InstancesSummary(Map(
+        "c3" -> 2.5f,
+        "m5" -> 4.0f,
+        "c2" -> 10.5f,
+      )).toJsonString)
 
       //    val ec2reservedInstances = new AWSReservedInstancesDownloader(regionName,awsKey, awsSecret).download()
       //    println(ec2reservedInstances.length + " reserved instances:")
