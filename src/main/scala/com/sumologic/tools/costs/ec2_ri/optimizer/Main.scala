@@ -1,5 +1,6 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer
 
+import com.sumologic.tools.costs.ec2_ri.optimizer.analizer.Ec2RiAnalizer
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2Instance
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.aws.AwsEc2InstancesDownloader
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.Ec2InstancesSummarizer
@@ -51,6 +52,10 @@ object Main {
     val totalReservedInstancesSummary = new ReservedInstancesSummarizer(totalReservedInstances.toSeq).summarize()
     println("TOTAL " + totalReservedInstances.length + " reserved instances summary:")
     println(totalReservedInstancesSummary.toJsonString)
+
+    val ec2RiAnalysisSummary = new Ec2RiAnalizer(totalEc2instancesSummary, totalReservedInstancesSummary).analyze()
+    println("TOTAL running/reserved instances summary:")
+    println(ec2RiAnalysisSummary.toJsonString)
 
     bufferedSource.close
   }
