@@ -1,4 +1,4 @@
-package com.sumologic.tools.costs.ec2_ri.optimizer.ri
+package com.sumologic.tools.costs.ri_ri.optimizer.ri
 
 import com.amazonaws.services.ec2.model.ReservedInstances
 import com.sumologic.tools.costs.ec2_ri.optimizer.utils.AwsInstanceSizeNormalizator
