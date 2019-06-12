@@ -15,11 +15,10 @@ object Main {
   def main(args: Array[String]): Unit = {
     val filename = args(0)
 
-    val bufferedSource = Source.fromFile(filename)
-
     val totalEc2instances = new ListBuffer[Ec2Instance]()
     val totalReservedInstances = new ListBuffer[ReservedInstance]()
 
+    val bufferedSource = Source.fromFile(filename)
     for (line <- bufferedSource.getLines) {
       println(line)
 
@@ -37,26 +36,27 @@ object Main {
       val awsReservedInstances = new AwsReservedInstancesDownloader(regionName, awsKey, awsSecret).download()
       totalReservedInstances.addAll(awsReservedInstances)
       val awsReservedInstancesSummary = new ReservedInstancesSummarizer(awsReservedInstances).summarize()
-      println(awsReservedInstances.length + " aws reserved instances:")
-      for (awsReservedInstance <- awsReservedInstances) {
-        println(awsReservedInstance.toJsonString)
-      }
       println(awsReservedInstances.length + " aws reserved instances summary:")
-      println(awsEc2instancesSummary.toJsonString)
+      println(awsReservedInstancesSummary.toJsonString)
+
+      println
     }
+    bufferedSource.close
 
     val totalEc2instancesSummary = new Ec2InstancesSummarizer(totalEc2instances.toSeq).summarize()
-    println("TOTAL " + totalEc2instances.length + " instances summary:")
+    //        val totalEc2instancesSummary = new JsonEc2InstancesSummarizer(Source.fromFile("ec2_summary.json")).summarize()
+    println("TOTAL instances summary:")
     println(totalEc2instancesSummary.toJsonString)
 
     val totalReservedInstancesSummary = new ReservedInstancesSummarizer(totalReservedInstances.toSeq).summarize()
-    println("TOTAL " + totalReservedInstances.length + " reserved instances summary:")
+    //        val totalReservedInstancesSummary = new JsonReservedInstancesSummarizer(Source.fromFile("ri_summary.json")).summarize()
+    println("TOTAL reserved instances summary:")
     println(totalReservedInstancesSummary.toJsonString)
 
-    val ec2RiAnalysisSummary = new Ec2RiAnalizer(totalEc2instancesSummary, totalReservedInstancesSummary).analyze()
+    val ec2RiAnalysisSummary = new Ec2RiAnalizer(totalEc2instancesSummary, totalReservedInstancesSummary).analize()
+    //    val ec2RiAnalysisSummary = new JsonEc2RiAnalizer(Source.fromFile("ec2_ri_analysis.json")).analize()
     println("TOTAL running/reserved instances summary:")
     println(ec2RiAnalysisSummary.toJsonString)
 
-    bufferedSource.close
   }
 }

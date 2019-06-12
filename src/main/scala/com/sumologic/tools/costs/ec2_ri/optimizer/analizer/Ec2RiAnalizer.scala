@@ -7,7 +7,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 class Ec2RiAnalizer(ec2InstancesSummary: Ec2InstancesSummary, reservedInstancesSummary: ReservedInstancesSummary) {
-  def analyze() = {
+  def analize() = {
     val allFamilies = new ListBuffer[String]()
     allFamilies.addAll(ec2InstancesSummary.familiesTotalSizes.keys)
     allFamilies.addAll(reservedInstancesSummary.familiesTotalSizes.keys)
