@@ -5,6 +5,6 @@ import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.Ec2InstancesDow
 
 class JsonEc2InstancesDownloader(jsonStringEc2Instances: String) extends Ec2InstancesDownloader {
   override def download(): List[Ec2Instance] = {
-    null
+    Ec2Instance.listFromJsonString(jsonStringEc2Instances)
   }
 }

@@ -4,7 +4,7 @@ import com.amazonaws.services.ec2.model.Instance
 import org.json4s.DefaultFormats
 import org.json4s.native.Serialization.{read, write}
 
-case class Ec2Instance(id: String, family: String, size: String, running: Boolean) {
+case class Ec2Instance(id: String, family: String, size: Float, running: Boolean) {
   // nothing
 
   def toJsonString: String = {
@@ -13,11 +13,12 @@ case class Ec2Instance(id: String, family: String, size: String, running: Boolea
 }
 
 object Ec2Instance {
+
   def fromAwsInstance(awsInstance: Instance): Ec2Instance = {
     Ec2Instance(
       awsInstance.getInstanceId,
       awsInstance.getInstanceType.split('.')(0),
-      awsInstance.getInstanceType.split('.')(1),
+      NormalizationFactor.apply(awsInstance.getInstanceType.split('.')(1)),
       awsInstance.getState.getName == "running"
     )
   }
