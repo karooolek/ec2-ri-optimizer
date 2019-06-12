@@ -11,11 +11,8 @@ class InstancesEc2InstancesSummarizer(ec2instances: Seq[Ec2Instance]) extends Ec
     val ec2familiesCounts = collection.mutable.Map[String, Double]()
     for (ec2family <- ec2familiesInstances.keys) {
       val ec2familyInstances = ec2familiesInstances(ec2family)
-      var totalFamilySize = 0.0
-      for (ec2familyInstance <- ec2familyInstances) {
-        totalFamilySize += ec2familyInstance.size
-      }
-      ec2familiesCounts.put(ec2family, totalFamilySize)
+      var totalRunningFamilySize = ec2familyInstances.filter(_.running).foldLeft(0.0)(_ + _.size)
+      ec2familiesCounts.put(ec2family, totalRunningFamilySize)
     }
     Ec2InstancesSummary(ec2familiesCounts.toMap)
   }
