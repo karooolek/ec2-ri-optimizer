@@ -1,9 +1,8 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer
 
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2Instance
+import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.{Ec2Instance, Ec2InstancesSummary}
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.aws.AwsEc2InstancesDownloader
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.json.JsonEc2InstancesDownloader
-import com.sumologic.tools.costs.ec2_ri.optimizer.summarizer.Ec2InstancesSummary
 
 import scala.io.Source
 

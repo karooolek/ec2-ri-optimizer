@@ -1,7 +1,7 @@
-package com.sumologic.tools.costs.ec2_ri.optimizer.summarizer
+package com.sumologic.tools.costs.ec2_ri.optimizer.ec2
 
 import org.json4s.DefaultFormats
-import org.json4s.native.Serialization.{write, read}
+import org.json4s.native.Serialization.{read, write}
 
 case class Ec2InstancesSummary(familiesCounts: Map[String, Float]) {
   // nothing
