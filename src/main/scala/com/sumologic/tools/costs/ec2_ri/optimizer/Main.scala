@@ -1,12 +1,11 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer
 
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.{Ec2Instance, Ec2InstancesSummary}
+import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2Instance
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.aws.AwsEc2InstancesDownloader
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.json.JsonEc2InstancesDownloader
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.instances.InstancesEc2InstancesSummarizer
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.json.JsonEc2InstancesSummarizer
+import com.sumologic.tools.costs.ec2_ri.optimizer.ri.ReservedInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.ri.downloader.aws.AwsReservedInstancesDownloader
 
-import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
@@ -17,6 +16,7 @@ object Main {
     val bufferedSource = Source.fromFile(filename)
 
     val allAwsEc2instances = new ListBuffer[Ec2Instance]()
+    val allAwsReservedInstances = new ListBuffer[ReservedInstance]()
 
     for (line <- bufferedSource.getLines) {
       println(line)
@@ -32,6 +32,16 @@ object Main {
 
       println(awsEc2instances.length + " aws instances summary:")
       println(awsEc2instancesSummary.toJsonString)
+
+      val awsReservedInstances = new AwsReservedInstancesDownloader(regionName, awsKey, awsSecret).download()
+      allAwsReservedInstances.addAll(awsReservedInstances)
+
+
+      println(awsReservedInstances.length + " aws reserved instances:")
+      for (awsReservedInstance <- awsReservedInstances) {
+        println(awsReservedInstance.toJsonString)
+      }
+      // TODO create summary
     }
 
     val allAwsEc2instancesSummary = new InstancesEc2InstancesSummarizer(allAwsEc2instances.toSeq).summarize()

@@ -1,7 +1,7 @@
-package com.sumologic.tools.costs.ec2_ri.optimizer.ec2
+package com.sumologic.tools.costs.ec2_ri.optimizer.utils
 
-object NormalizationFactor {
-  def apply(instanceSize: String): Float = {
+object AwsInstanceSizeNormalizator {
+  def normalize(instanceSize: String): Float = {
     factors.get(instanceSize) match {
       case Some(v) => v
       case None => throw new RuntimeException(s"Normalization factor not known for $instanceSize")

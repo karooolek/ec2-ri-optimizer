@@ -19,21 +19,21 @@ class AwsEc2InstancesDownloader(awsRegion: String, awsKey: String, awsSecret: St
       build()
 
     var ec2instances = ListBuffer[Ec2Instance]()
-    var awsDescribeInstances = ec2client.describeInstances()
-    for (awsReservation <- awsDescribeInstances.getReservations.asScala) {
+    var awsDescribeInstancesResponse = ec2client.describeInstances()
+    for (awsReservation <- awsDescribeInstancesResponse.getReservations.asScala) {
       for (awsInstance <- awsReservation.getInstances.asScala) {
         ec2instances += Ec2Instance.fromAwsInstance(awsInstance)
       }
     }
-    var nextToken = awsDescribeInstances.getNextToken
+    var nextToken = awsDescribeInstancesResponse.getNextToken
     while (nextToken != null) {
-      awsDescribeInstances = ec2client.describeInstances(new DescribeInstancesRequest().withNextToken(nextToken))
-      for (awsReservation <- awsDescribeInstances.getReservations.asScala) {
+      awsDescribeInstancesResponse = ec2client.describeInstances(new DescribeInstancesRequest().withNextToken(nextToken))
+      for (awsReservation <- awsDescribeInstancesResponse.getReservations.asScala) {
         for (awsInstance <- awsReservation.getInstances.asScala) {
           ec2instances += Ec2Instance.fromAwsInstance(awsInstance)
         }
       }
-      nextToken = awsDescribeInstances.getNextToken
+      nextToken = awsDescribeInstancesResponse.getNextToken
     }
 
     ec2client.shutdown()
