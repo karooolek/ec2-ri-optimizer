@@ -27,39 +27,11 @@ object Main {
       val awsSecret = args(2)
 
       val awsEc2instances = new AwsEc2InstancesDownloader(regionName, awsKey, awsSecret).download()
-      val awsEc2instancesSummary = new InstancesEc2InstancesSummarizer(awsEc2instances.toSeq).summarize()
+      allAwsEc2instances.addAll(awsEc2instances)
+      val awsEc2instancesSummary = new InstancesEc2InstancesSummarizer(awsEc2instances).summarize()
+
       println(awsEc2instances.length + " aws instances summary:")
       println(awsEc2instancesSummary.toJsonString)
-
-      allAwsEc2instances.addAll(awsEc2instances)
-
-      //      val jsonEc2instances = new JsonEc2InstancesDownloader(Ec2Instance.toListJsonString(awsEc2instances)).download()
-      //      println(jsonEc2instances.length + " json instances:")
-      //      for (jsonEc2instance <- jsonEc2instances) {
-      //        println(jsonEc2instance.toJsonString)
-      //      }
-
-
-      //      val jsonEc2instancesSummary = new JsonEc2InstancesSummarizer(awsEc2instancesSummary.toJsonString).summarize()
-      //      println("json instances summary:")
-      //      println(jsonEc2instancesSummary.toJsonString)
-
-      //      println("instances summary:")
-      //      val ec2instanceSummary = Ec2InstancesSummary(
-      //        Map(
-      //          "c3" -> 2.5f,
-      //          "m5" -> 4.0f,
-      //          "c2" -> 10.5f,
-      //        )
-      //      )
-      //      println(ec2instanceSummary.toJsonString)
-
-
-      //    val ec2reservedInstances = new AWSReservedInstancesDownloader(regionName,awsKey, awsSecret).download()
-      //    println(ec2reservedInstances.length + " reserved instances:")
-      //    for (ec2reservedInstance <- ec2reservedInstances) {
-      //      println(ec2reservedInstance)
-      //    }
     }
 
     val allAwsEc2instancesSummary = new InstancesEc2InstancesSummarizer(allAwsEc2instances.toSeq).summarize()

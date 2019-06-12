@@ -7,8 +7,10 @@ import org.json4s.native.Serialization.{read, write}
 case class Ec2Instance(id: String, family: String, size: Double, running: Boolean) {
   // nothing
 
+  implicit lazy val formats = DefaultFormats
+
   def toJsonString: String = {
-    write(this)(formats = DefaultFormats)
+    write(this)
   }
 }
 
@@ -23,15 +25,17 @@ object Ec2Instance {
     )
   }
 
+  implicit lazy val formats = DefaultFormats
+
   def fromJsonString(jsonStringEc2Instance: String): Ec2Instance = {
-    read[Ec2Instance](jsonStringEc2Instance)(formats = DefaultFormats, mf = Manifest.classType(Ec2Instance.getClass))
+    read[Ec2Instance](jsonStringEc2Instance)
   }
 
   def seqFromJsonString(jsonStringEc2Instance: String): Seq[Ec2Instance] = {
-    read[Seq[Ec2Instance]](jsonStringEc2Instance)(formats = DefaultFormats, mf = Manifest.classType(Ec2Instance.getClass))
+    read[Seq[Ec2Instance]](jsonStringEc2Instance)
   }
 
   def toListJsonString(ec2instances: Seq[Ec2Instance]): String = {
-    write(ec2instances)(formats = DefaultFormats)
+    write(ec2instances)
   }
 }

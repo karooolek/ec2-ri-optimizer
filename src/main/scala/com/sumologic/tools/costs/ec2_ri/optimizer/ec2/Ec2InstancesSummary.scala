@@ -6,13 +6,18 @@ import org.json4s.native.Serialization.{read, write}
 case class Ec2InstancesSummary(familiesTotalSizes: Map[String, Double]) {
   // nothing
 
+  implicit lazy val formats = DefaultFormats
+
   def toJsonString: String = {
-    write(this)(formats = DefaultFormats)
+    write(this)
   }
 }
 
 object Ec2InstancesSummary {
+
+  implicit lazy val formats = DefaultFormats
+
   def fromJsonString(jsonStringEc2InstancesSummary: String): Ec2InstancesSummary = {
-    read[Ec2InstancesSummary](jsonStringEc2InstancesSummary)(formats = DefaultFormats, mf = Manifest.classType(Ec2InstancesSummary.getClass))
+    read[Ec2InstancesSummary](jsonStringEc2InstancesSummary)
   }
 }
