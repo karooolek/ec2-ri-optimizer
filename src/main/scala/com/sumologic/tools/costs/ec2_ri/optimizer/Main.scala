@@ -6,6 +6,8 @@ import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.json.JsonEc2Ins
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.instances.InstancesEc2InstancesSummarizer
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.json.JsonEc2InstancesSummarizer
 
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 object Main {
@@ -13,6 +15,9 @@ object Main {
     val filename = args(0)
 
     val bufferedSource = Source.fromFile(filename)
+
+    val allAwsEc2instances = new ListBuffer[Ec2Instance]()
+
     for (line <- bufferedSource.getLines) {
       println(line)
 
@@ -22,25 +27,22 @@ object Main {
       val awsSecret = args(2)
 
       val awsEc2instances = new AwsEc2InstancesDownloader(regionName, awsKey, awsSecret).download()
-      println(awsEc2instances.length + " aws instances:")
-      for (awsEc2Instances <- awsEc2instances) {
-        println(awsEc2Instances.toJsonString)
-      }
-
-//      val jsonEc2instances = new JsonEc2InstancesDownloader(Ec2Instance.toListJsonString(awsEc2instances)).download()
-//      println(jsonEc2instances.length + " json instances:")
-//      for (jsonEc2instance <- jsonEc2instances) {
-//        println(jsonEc2instance.toJsonString)
-//      }
-
-      val awsEc2instancesSummary = new InstancesEc2InstancesSummarizer(awsEc2instances).summarize()
-      println("aws instances summary:")
+      val awsEc2instancesSummary = new InstancesEc2InstancesSummarizer(awsEc2instances.toSeq).summarize()
+      println(awsEc2instances.length + " aws instances summary:")
       println(awsEc2instancesSummary.toJsonString)
 
+      allAwsEc2instances.addAll(awsEc2instances)
 
-      val jsonEc2instancesSummary = new JsonEc2InstancesSummarizer(awsEc2instancesSummary.toJsonString).summarize()
-      println("json instances summary:")
-      println(jsonEc2instancesSummary.toJsonString)
+      //      val jsonEc2instances = new JsonEc2InstancesDownloader(Ec2Instance.toListJsonString(awsEc2instances)).download()
+      //      println(jsonEc2instances.length + " json instances:")
+      //      for (jsonEc2instance <- jsonEc2instances) {
+      //        println(jsonEc2instance.toJsonString)
+      //      }
+
+
+      //      val jsonEc2instancesSummary = new JsonEc2InstancesSummarizer(awsEc2instancesSummary.toJsonString).summarize()
+      //      println("json instances summary:")
+      //      println(jsonEc2instancesSummary.toJsonString)
 
       //      println("instances summary:")
       //      val ec2instanceSummary = Ec2InstancesSummary(
@@ -58,8 +60,12 @@ object Main {
       //    for (ec2reservedInstance <- ec2reservedInstances) {
       //      println(ec2reservedInstance)
       //    }
-
     }
+
+    val allAwsEc2instancesSummary = new InstancesEc2InstancesSummarizer(allAwsEc2instances.toSeq).summarize()
+    println("TOTAL " + allAwsEc2instances.length + " aws instances summary:")
+    println(allAwsEc2instancesSummary.toJsonString)
+
     bufferedSource.close
   }
 }
