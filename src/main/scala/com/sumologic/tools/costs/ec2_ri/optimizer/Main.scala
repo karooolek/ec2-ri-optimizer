@@ -18,7 +18,7 @@ object Main {
       val ec2instances = new AWSEC2InstancesDownloader(regionName, awsKey, awsSecret).download()
       println(ec2instances.length + " instances:")
       for (ec2instance <- ec2instances) {
-        println(ec2instance)
+        println(ec2instance.toJsonString())
       }
 
       //    val ec2reservedInstances = new AWSReservedInstancesDownloader(regionName,awsKey, awsSecret).download()

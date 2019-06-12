@@ -4,5 +4,6 @@ version := "0.1"
 
 scalaVersion := "2.13.0"
 
-// https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk
 libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.11.568"
+libraryDependencies += "org.json4s" %% "json4s-native" % "3.6.6"
+libraryDependencies += "com.sumologic.shellbase" % "shellbase-slack" % "1.5.1"
