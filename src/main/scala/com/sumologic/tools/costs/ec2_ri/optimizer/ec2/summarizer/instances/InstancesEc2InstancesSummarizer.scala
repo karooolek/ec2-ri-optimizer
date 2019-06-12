@@ -8,10 +8,10 @@ import scala.collection.immutable
 class InstancesEc2InstancesSummarizer(ec2instances: Seq[Ec2Instance]) extends Ec2InstancesSummarizer {
   override def summarize(): Ec2InstancesSummary = {
     val ec2familiesInstances = ec2instances.groupBy(_.family)
-    val ec2familiesCounts = collection.mutable.Map[String, Float]()
+    val ec2familiesCounts = collection.mutable.Map[String, Double]()
     for (ec2family <- ec2familiesInstances.keys) {
       val ec2familyInstances = ec2familiesInstances(ec2family)
-      var totalFamilySize = 0.0f
+      var totalFamilySize = 0.0
       for (ec2familyInstance <- ec2familyInstances) {
         totalFamilySize += ec2familyInstance.size
       }

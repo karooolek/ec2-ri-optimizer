@@ -4,7 +4,7 @@ import com.amazonaws.services.ec2.model.Instance
 import org.json4s.DefaultFormats
 import org.json4s.native.Serialization.{read, write}
 
-case class Ec2Instance(id: String, family: String, size: Float, running: Boolean) {
+case class Ec2Instance(id: String, family: String, size: Double, running: Boolean) {
   // nothing
 
   def toJsonString: String = {
@@ -27,11 +27,11 @@ object Ec2Instance {
     read[Ec2Instance](jsonStringEc2Instance)(formats = DefaultFormats, mf = Manifest.classType(Ec2Instance.getClass))
   }
 
-  def listFromJsonString(jsonStringEc2Instance: String): List[Ec2Instance] = {
-    read[List[Ec2Instance]](jsonStringEc2Instance)(formats = DefaultFormats, mf = Manifest.classType(Ec2Instance.getClass))
+  def seqFromJsonString(jsonStringEc2Instance: String): Seq[Ec2Instance] = {
+    read[Seq[Ec2Instance]](jsonStringEc2Instance)(formats = DefaultFormats, mf = Manifest.classType(Ec2Instance.getClass))
   }
 
-  def toListJsonString(ec2instances: List[Ec2Instance]): String = {
+  def toListJsonString(ec2instances: Seq[Ec2Instance]): String = {
     write(ec2instances)(formats = DefaultFormats)
   }
 }

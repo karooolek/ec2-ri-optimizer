@@ -26,20 +26,23 @@ object Main {
       for (awsEc2Instances <- awsEc2instances) {
         println(awsEc2Instances.toJsonString)
       }
-      val awsEc2instancesSummary = new InstancesEc2InstancesSummarizer(awsEc2instances).summarize()
-      println("aws instances summary:")
-      println(awsEc2instancesSummary.toJsonString)
 
 //      val jsonEc2instances = new JsonEc2InstancesDownloader(Ec2Instance.toListJsonString(awsEc2instances)).download()
 //      println(jsonEc2instances.length + " json instances:")
 //      for (jsonEc2instance <- jsonEc2instances) {
 //        println(jsonEc2instance.toJsonString)
 //      }
-      //      val jsonEc2instancesSummary = new JsonEc2InstancesSummarizer(ec2instanceSummary.toJsonString).summarize()
-      //      println("json instances summary:")
-      //      println(jsonEc2instancesSummary.toJsonString)
 
-//      println("instances summary:")
+      val awsEc2instancesSummary = new InstancesEc2InstancesSummarizer(awsEc2instances).summarize()
+      println("aws instances summary:")
+      println(awsEc2instancesSummary.toJsonString)
+
+
+      val jsonEc2instancesSummary = new JsonEc2InstancesSummarizer(awsEc2instancesSummary.toJsonString).summarize()
+      println("json instances summary:")
+      println(jsonEc2instancesSummary.toJsonString)
+
+      //      println("instances summary:")
       //      val ec2instanceSummary = Ec2InstancesSummary(
       //        Map(
       //          "c3" -> 2.5f,
