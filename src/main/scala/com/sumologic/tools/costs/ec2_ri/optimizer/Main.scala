@@ -32,12 +32,14 @@ object Main {
       val awsEc2instancesSummary = new Ec2InstancesSummarizer(awsEc2instances).summarize()
       println(awsEc2instances.length + " aws instances summary:")
       println(awsEc2instancesSummary.toJsonString)
+      println(Ec2Instance.toListJsonString(awsEc2instances))
 
       val awsReservedInstances = new AwsReservedInstancesDownloader(regionName, awsKey, awsSecret).download()
       totalReservedInstances.addAll(awsReservedInstances)
       val awsReservedInstancesSummary = new ReservedInstancesSummarizer(awsReservedInstances).summarize()
       println(awsReservedInstances.length + " aws reserved instances summary:")
       println(awsReservedInstancesSummary.toJsonString)
+      println(ReservedInstance.toListJsonString(awsReservedInstances))
 
       println
     }
