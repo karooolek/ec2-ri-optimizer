@@ -12,12 +12,13 @@ class Ec2RiAnalizer(ec2InstancesSummary: Ec2InstancesSummary, reservedInstancesS
     allFamilies.addAll(ec2InstancesSummary.familiesTotalSizes.keys)
     allFamilies.addAll(reservedInstancesSummary.familiesTotalSizes.keys)
 
-    val familiesSizeDiffs = mutable.Map[String, Double]()
+    val familiesSizeDiffs = mutable.Map[String, Ec2RiSizeDiff]()
     for (family <- allFamilies) {
       val runningSize = ec2InstancesSummary.familiesTotalSizes.getOrElse(family, 0.0)
       val reservedSize = reservedInstancesSummary.familiesTotalSizes.getOrElse(family, 0.0)
-      val sizeDiff = reservedSize - runningSize;
-      familiesSizeDiffs.put(family, sizeDiff)
+      val absDiff = runningSize - reservedSize
+      val relDiff = runningSize / reservedSize
+      familiesSizeDiffs.put(family, Ec2RiSizeDiff(absDiff, relDiff))
     }
 
     Ec2RiAnalysis(familiesSizeDiffs.toMap)

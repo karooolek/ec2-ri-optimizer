@@ -1,10 +1,9 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer.analizer
 
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2InstancesSummary
 import org.json4s.DefaultFormats
-import org.json4s.native.Serialization.{write, read}
+import org.json4s.native.Serialization.{read, write}
 
-case class Ec2RiAnalysis(familiesSizeDiffs: Map[String, Double]) {
+case class Ec2RiAnalysis(familiesSizeDiffs: Map[String, Ec2RiSizeDiff]) {
   // nothing
 
   implicit lazy val formats = DefaultFormats
