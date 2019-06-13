@@ -20,12 +20,12 @@ object Main {
 
     val bufferedSource = Source.fromFile(filename)
     for (line <- bufferedSource.getLines) {
-      println(line)
-
       val args = line.split(";")
       val regionName = args(0)
       val awsKey = args(1)
       val awsSecret = args(2)
+
+      println(s"Region: ${regionName}")
 
       val awsEc2instances = new AwsEc2InstancesDownloader(regionName, awsKey, awsSecret).download()
       totalEc2instances.addAll(awsEc2instances)
