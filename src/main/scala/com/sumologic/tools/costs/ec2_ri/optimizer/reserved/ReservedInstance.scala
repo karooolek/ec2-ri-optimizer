@@ -18,10 +18,11 @@ case class ReservedInstance(id: String, family: String, size: Double, active: Bo
 object ReservedInstance {
 
   def fromAwsReservedInstance(awsReservedInstances: ReservedInstances): ReservedInstance = {
+    val iType = awsReservedInstances.getInstanceType.split('.')
     ReservedInstance(
       awsReservedInstances.getReservedInstancesId,
-      awsReservedInstances.getInstanceType.split('.')(0),
-      AwsInstanceSizeNormalizator.normalize(awsReservedInstances.getInstanceType.split('.')(1)),
+      iType(0),
+      awsReservedInstances.getInstanceCount * AwsInstanceSizeNormalizator.normalize(iType(1)),
       awsReservedInstances.getState == "active",
       awsReservedInstances.getOfferingClass == "convertible"
     )
