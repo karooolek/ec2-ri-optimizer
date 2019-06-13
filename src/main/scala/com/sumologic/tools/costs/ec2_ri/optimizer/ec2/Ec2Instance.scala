@@ -18,10 +18,11 @@ case class Ec2Instance(id: String, family: String, size: Double, running: Boolea
 object Ec2Instance {
 
   def fromAwsInstance(awsInstance: Instance): Ec2Instance = {
+    val iType = awsInstance.getInstanceType.split('.')
     Ec2Instance(
       awsInstance.getInstanceId,
-      awsInstance.getInstanceType.split('.')(0),
-      AwsInstanceSizeNormalizator.normalize(awsInstance.getInstanceType.split('.')(1)),
+      iType(0),
+      AwsInstanceSizeNormalizator.normalize(iType(1)),
       awsInstance.getState.getName == "running"
     )
   }
