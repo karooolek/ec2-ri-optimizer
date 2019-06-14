@@ -3,7 +3,7 @@ package com.sumologic.tools.costs.ec2_ri.optimizer.ec2
 import org.json4s.DefaultFormats
 import org.json4s.native.Serialization.{read, write}
 
-case class Ec2InstancesSummary(familiesTotalSizes: Map[String, Double]) {
+case class Ec2InstancesSummary(ec2familiesSizes: Map[String, Double]) {
   // nothing
 
   implicit lazy val formats = DefaultFormats

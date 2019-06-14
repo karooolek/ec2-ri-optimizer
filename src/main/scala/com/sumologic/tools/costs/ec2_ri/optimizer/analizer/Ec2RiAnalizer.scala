@@ -9,13 +9,13 @@ import scala.collection.mutable.ListBuffer
 class Ec2RiAnalizer(ec2InstancesSummary: Ec2InstancesSummary, reservedInstancesSummary: ReservedInstancesSummary) {
   def analize() = {
     val allFamilies = new ListBuffer[String]()
-    allFamilies.addAll(ec2InstancesSummary.familiesTotalSizes.keys)
-    allFamilies.addAll(reservedInstancesSummary.familiesTotalSizes.keys)
+    allFamilies.addAll(ec2InstancesSummary.ec2familiesSizes.keys)
+    allFamilies.addAll(reservedInstancesSummary.reservedFamiliesSizes.keys)
 
     val familiesSizeDiffs = mutable.Map[String, Ec2RiSizeDiff]()
     for (family <- allFamilies) {
-      val runningSize = ec2InstancesSummary.familiesTotalSizes.getOrElse(family, 0.0)
-      val reservedSize = reservedInstancesSummary.familiesTotalSizes.getOrElse(family, 0.0)
+      val runningSize = ec2InstancesSummary.ec2familiesSizes.getOrElse(family, 0.0)
+      val reservedSize = reservedInstancesSummary.reservedFamiliesSizes.getOrElse(family, 0.0)
       val absDiff = runningSize - reservedSize
       val relDiff = runningSize / reservedSize
       familiesSizeDiffs.put(family, Ec2RiSizeDiff(absDiff, relDiff))
