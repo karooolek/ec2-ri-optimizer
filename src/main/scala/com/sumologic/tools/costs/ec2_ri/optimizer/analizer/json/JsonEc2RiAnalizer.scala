@@ -1,7 +1,6 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer.analizer.json
 
 import com.sumologic.tools.costs.ec2_ri.optimizer.analizer.{Ec2RiAnalizer, Ec2RiAnalysis}
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2InstancesSummary
 
 import scala.io.Source
 
