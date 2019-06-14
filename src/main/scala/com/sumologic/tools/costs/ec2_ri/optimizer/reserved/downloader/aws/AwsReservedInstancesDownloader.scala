@@ -7,7 +7,6 @@ import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstance
 import com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.ReservedInstancesDownloader
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
 
 class AwsReservedInstancesDownloader(awsRegion: String, awsKey: String, awsSecret: String) extends ReservedInstancesDownloader {
   override def download(): Seq[ReservedInstance] = {
@@ -16,14 +15,12 @@ class AwsReservedInstancesDownloader(awsRegion: String, awsKey: String, awsSecre
       withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsKey, awsSecret))).
       build()
 
-    var reservedInstances = ListBuffer[ReservedInstance]()
-    var awsDescribeReservedInstancesResponse = ec2client.describeReservedInstances()
-    for (awsReservedInstance <- awsDescribeReservedInstancesResponse.getReservedInstances.asScala) {
-      reservedInstances += ReservedInstance.fromAwsReservedInstance(awsReservedInstance)
-    }
-
+    val awsDescribeReservedInstancesResponse = ec2client.describeReservedInstances()
+    val reservedInstances = awsDescribeReservedInstancesResponse.getReservedInstances.asScala.map(awsReservedInstance => {
+      ReservedInstance.fromAwsReservedInstance(awsReservedInstance)
+    })
     ec2client.shutdown()
 
-    reservedInstances.toList
+    reservedInstances.toSeq
   }
 }
