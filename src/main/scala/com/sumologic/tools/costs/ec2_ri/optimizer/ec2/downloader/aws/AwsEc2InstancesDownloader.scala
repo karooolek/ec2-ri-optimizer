@@ -8,37 +8,38 @@ import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.Ec2Instance
 import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.Ec2InstancesDownloader
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
 
 class AwsEc2InstancesDownloader(awsRegion: String, awsKey: String, awsSecret: String) extends Ec2InstancesDownloader {
 
-  def download(): List[Ec2Instance] = {
+  def download(): Seq[Ec2Instance] = {
     val ec2client = AmazonEC2Client.builder().
       withRegion(Regions.fromName(awsRegion)).
       withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(awsKey, awsSecret))).
       build()
 
-    var ec2instances = ListBuffer[Ec2Instance]()
     var awsDescribeInstancesResponse = ec2client.describeInstances()
-    for (awsReservation <- awsDescribeInstancesResponse.getReservations.asScala) {
-      for (awsInstance <- awsReservation.getInstances.asScala) {
-        ec2instances += Ec2Instance.fromAwsInstance(awsInstance)
-      }
-    }
+    val ec2instances = awsDescribeInstancesResponse.getReservations.asScala.flatMap(
+      awsReservation => awsReservation.getInstances.asScala.map(
+        awsInstance => Ec2Instance.fromAwsInstance(awsInstance)
+      )
+    )
+
     var nextToken = awsDescribeInstancesResponse.getNextToken
     while (nextToken != null) {
-      awsDescribeInstancesResponse = ec2client.describeInstances(new DescribeInstancesRequest().withNextToken(nextToken))
-      for (awsReservation <- awsDescribeInstancesResponse.getReservations.asScala) {
-        for (awsInstance <- awsReservation.getInstances.asScala) {
-          ec2instances += Ec2Instance.fromAwsInstance(awsInstance)
-        }
-      }
+      awsDescribeInstancesResponse = ec2client.describeInstances(new DescribeInstancesRequest().
+        withNextToken(nextToken)
+      )
+      ec2instances.addAll(awsDescribeInstancesResponse.getReservations.asScala.flatMap(
+        awsReservation => awsReservation.getInstances.asScala.map(
+          awsInstance => Ec2Instance.fromAwsInstance(awsInstance)
+        )
+      ))
       nextToken = awsDescribeInstancesResponse.getNextToken
     }
 
     ec2client.shutdown()
 
-    ec2instances.toList
+    ec2instances.toSeq
   }
 
 }
