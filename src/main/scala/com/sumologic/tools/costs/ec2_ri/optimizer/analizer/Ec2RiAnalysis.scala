@@ -3,7 +3,13 @@ package com.sumologic.tools.costs.ec2_ri.optimizer.analizer
 import org.json4s.DefaultFormats
 import org.json4s.native.Serialization.{read, write}
 
-case class Ec2RiAnalysis(familiesSizeDiffs: Map[String, Ec2RiSizeDiff], overReservedFamilies: Seq[String], underReservedFamilies: Seq[String]) {
+case class Ec2RiAnalysis(
+                          familiesSizeDiffs: Map[String, Ec2RiSizeDiff],
+                          overReservedFamiliesPrices: Map[String, Double],
+                          underReservedFamiliesPrices: Map[String, Double],
+                          totalOverReservedFamiliesPrice: Double,
+                          totalUnderReservedFamiliesPrice: Double
+                        ) {
   // nothing
 
   implicit lazy val formats = DefaultFormats

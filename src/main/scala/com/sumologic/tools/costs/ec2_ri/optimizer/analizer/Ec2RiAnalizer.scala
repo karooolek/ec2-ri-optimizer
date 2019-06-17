@@ -2,6 +2,7 @@ package com.sumologic.tools.costs.ec2_ri.optimizer.analizer
 
 import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstancesSummary
 import com.sumologic.tools.costs.ec2_ri.optimizer.running.RunningInstancesSummary
+import com.sumologic.tools.costs.ec2_ri.optimizer.utils.AwsFamilyPriceNormalizator
 
 class Ec2RiAnalizer(runningInstancesSummary: RunningInstancesSummary, reservedInstancesSummary: ReservedInstancesSummary) {
   def analize() = {
@@ -19,15 +20,27 @@ class Ec2RiAnalizer(runningInstancesSummary: RunningInstancesSummary, reservedIn
     }
     )).toMap
 
-    val overReservedFamilies = familiesSizeDiffs.filter({
+    val overReservedFamiliesPrices = familiesSizeDiffs.filter({
       case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => ec2riSizeDiff.reserved > ec2riSizeDiff.running
-    }).keys.toSeq
-
-    val underReservedFamilies = familiesSizeDiffs.filter({
+    }).map({
+      case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => (family, AwsFamilyPriceNormalizator.normalize(family) * (ec2riSizeDiff.reserved - ec2riSizeDiff.running))
+    })
+    val underReservedFamiliesPrices = familiesSizeDiffs.filter({
       case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => ec2riSizeDiff.reserved < ec2riSizeDiff.running
-    }).keys.toSeq
+    }).map({
+      case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => (family, AwsFamilyPriceNormalizator.normalize(family) * (ec2riSizeDiff.reserved - ec2riSizeDiff.running))
+    })
 
-    Ec2RiAnalysis(familiesSizeDiffs, overReservedFamilies, underReservedFamilies)
+    val totalOverReservedFamiliesPrice = overReservedFamiliesPrices.values.sum
+    val totalUnderReservedFamiliesPrice = underReservedFamiliesPrices.values.sum
+
+    Ec2RiAnalysis(
+      familiesSizeDiffs,
+      overReservedFamiliesPrices,
+      underReservedFamiliesPrices,
+      totalOverReservedFamiliesPrice,
+      totalUnderReservedFamiliesPrice
+    )
   }
 
 }
