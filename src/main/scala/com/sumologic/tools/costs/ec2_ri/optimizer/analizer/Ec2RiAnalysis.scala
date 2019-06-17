@@ -8,7 +8,9 @@ case class Ec2RiAnalysis(
                           overReservedFamiliesPrices: Map[String, Double],
                           underReservedFamiliesPrices: Map[String, Double],
                           totalOverReservedFamiliesPrice: Double,
-                          totalUnderReservedFamiliesPrice: Double
+                          totalUnderReservedFamiliesPrice: Double,
+                          totalReservationPrice: Double,
+                          suggestedConversions: Seq[Ec2RiConversion]
                         ) {
   // nothing
 
