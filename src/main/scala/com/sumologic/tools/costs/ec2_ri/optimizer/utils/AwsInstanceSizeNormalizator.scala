@@ -1,10 +1,10 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer.utils
 
 object AwsInstanceSizeNormalizator {
-  def normalize(instanceSize: String): Float = {
-    factors.get(instanceSize) match {
+  def normalize(awsSize: String): Float = {
+    factors.get(awsSize) match {
       case Some(v) => v
-      case None => throw new RuntimeException(s"Normalization factor not known for $instanceSize")
+      case None => throw new RuntimeException(s"Normalization factor not known for $awsSize")
     }
   }
 
