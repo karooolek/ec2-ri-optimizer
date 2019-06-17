@@ -1,6 +1,6 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer.utils
 
-object AwsInstanceSizeNormalizator {
+object AwsFamilyPriceNormalizator {
   def normalize(awsFamily: String): Float = {
     factors.get(awsFamily) match {
       case Some(v) => v
