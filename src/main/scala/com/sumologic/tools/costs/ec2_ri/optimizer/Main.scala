@@ -1,57 +1,60 @@
 package com.sumologic.tools.costs.ec2_ri.optimizer
 
 import com.sumologic.tools.costs.ec2_ri.optimizer.analizer.Ec2RiAnalizer
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.downloader.json.JsonEc2InstancesDownloader
-import com.sumologic.tools.costs.ec2_ri.optimizer.ec2.summarizer.Ec2InstancesSummarizer
-import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.downloader.json.JsonReservedInstancesDownloader
+import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstance
 import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.summarizer.ReservedInstancesSummarizer
+import com.sumologic.tools.costs.ec2_ri.optimizer.running.RunningInstance
+import com.sumologic.tools.costs.ec2_ri.optimizer.running.downloader.aws.AwsRunningInstancesDownloader
+import com.sumologic.tools.costs.ec2_ri.optimizer.running.summarizer.RunningInstancesSummarizer
+import com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.aws.AwsReservedInstancesDownloader
 
+import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 object Main {
   def main(args: Array[String]): Unit = {
-    //    val filename = args(0)
-    //
-    //    val totalEc2instances = new ListBuffer[Ec2Instance]()
-    //    val totalReservedInstances = new ListBuffer[ReservedInstance]()
-    //
-    //    val bufferedSource = Source.fromFile(filename)
-    //    for (line <- bufferedSource.getLines) {
-    //      val args = line.split(";")
-    //      val regionName = args(0)
-    //      val awsKey = args(1)
-    //      val awsSecret = args(2)
-    //
-    //      println(s"Region: ${regionName}")
-    //
-    //      val awsEc2instances = new AwsEc2InstancesDownloader(regionName, awsKey, awsSecret).download()
-    //      totalEc2instances.addAll(awsEc2instances)
-    //      val awsEc2instancesSummary = new Ec2InstancesSummarizer(awsEc2instances).summarize()
-    //      println(awsEc2instances.length + " aws instances summary:")
-    //      println(awsEc2instancesSummary.toJsonString)
-    //      println(Ec2Instance.toListJsonString(awsEc2instances))
-    //
-    //      val awsReservedInstances = new AwsReservedInstancesDownloader(regionName, awsKey, awsSecret).download()
-    //      totalReservedInstances.addAll(awsReservedInstances)
-    //      val awsReservedInstancesSummary = new ReservedInstancesSummarizer(awsReservedInstances).summarize()
-    //      println(awsReservedInstances.length + " aws reserved instances summary:")
-    //      println(awsReservedInstancesSummary.toJsonString)
-    //      println(ReservedInstance.toListJsonString(awsReservedInstances))
-    //
-    //      println
-    //    }
-    //    bufferedSource.close
+    val filename = args(0)
 
-    val totalEc2instances = new JsonEc2InstancesDownloader(Source.fromFile("ec2_instances.json")).download();
-    val totalReservedInstances = new JsonReservedInstancesDownloader(Source.fromFile("reserved_instances.json")).download();
+    val totalRunninginstances = new ListBuffer[RunningInstance]()
+    val totalReservedInstances = new ListBuffer[ReservedInstance]()
 
-    val totalEc2instancesSummary = new Ec2InstancesSummarizer(totalEc2instances.toSeq).summarize()
-    //        val totalEc2instancesSummary = new JsonEc2InstancesSummarizer(Source.fromFile("ec2_summary.json")).summarize()
+    val bufferedSource = Source.fromFile(filename)
+    for (line <- bufferedSource.getLines) {
+      val args = line.split(";")
+      val regionName = args(0)
+      val awsKey = args(1)
+      val awsSecret = args(2)
+
+      println(s"Region: ${regionName}")
+
+      val awsRunningInstances = new AwsRunningInstancesDownloader(regionName, awsKey, awsSecret).download()
+      totalRunninginstances.addAll(awsRunningInstances)
+      val awsEc2instancesSummary = new RunningInstancesSummarizer(awsRunningInstances).summarize()
+      println(awsRunningInstances.length + " aws running instances summary:")
+      println(awsEc2instancesSummary.toJsonString)
+      println(RunningInstance.toListJsonString(awsRunningInstances))
+
+      val awsReservedInstances = new AwsReservedInstancesDownloader(regionName, awsKey, awsSecret).download()
+      totalReservedInstances.addAll(awsReservedInstances)
+      val awsReservedInstancesSummary = new ReservedInstancesSummarizer(awsReservedInstances).summarize()
+      println(awsReservedInstances.length + " aws reserved instances summary:")
+      println(awsReservedInstancesSummary.toJsonString)
+      println(ReservedInstance.toListJsonString(awsReservedInstances))
+
+      println
+    }
+    bufferedSource.close
+
+//        val totalRunninginstances = new JsonRunningInstancesDownloader(Source.fromFile("running_instances.json")).download();
+//        val totalReservedInstances = new JsonReservedInstancesDownloader(Source.fromFile("reserved_instances.json")).download();
+
+    val totalEc2instancesSummary = new RunningInstancesSummarizer(totalRunninginstances.toSeq).summarize()
+    //        val totalEc2instancesSummary = new JsonEc2InstancesSummarizer(Source.fromFile("running_instances_summary.json")).summarize()
     println("TOTAL instances summary:")
     println(totalEc2instancesSummary.toJsonString)
 
     val totalReservedInstancesSummary = new ReservedInstancesSummarizer(totalReservedInstances.toSeq).summarize()
-    //        val totalReservedInstancesSummary = new JsonReservedInstancesSummarizer(Source.fromFile("ri_summary.json")).summarize()
+    //        val totalReservedInstancesSummary = new JsonReservedInstancesSummarizer(Source.fromFile("reserved_instances_summary.json")).summarize()
     println("TOTAL reserved instances summary:")
     println(totalReservedInstancesSummary.toJsonString)
 
