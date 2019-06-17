@@ -29,9 +29,9 @@ object Main {
 
       val awsRunningInstances = new AwsRunningInstancesDownloader(regionName, awsKey, awsSecret).download()
       totalRunninginstances.addAll(awsRunningInstances)
-      val awsEc2instancesSummary = new RunningInstancesSummarizer(awsRunningInstances).summarize()
+      val awsRunninginstancesSummary = new RunningInstancesSummarizer(awsRunningInstances).summarize()
       println(awsRunningInstances.length + " aws running instances summary:")
-      println(awsEc2instancesSummary.toJsonString)
+      println(awsRunninginstancesSummary.toJsonString)
       println(RunningInstance.toListJsonString(awsRunningInstances))
 
       val awsReservedInstances = new AwsReservedInstancesDownloader(regionName, awsKey, awsSecret).download()
