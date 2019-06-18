@@ -1,4 +1,4 @@
-package com.sumologic.tools.costs.ec2_ri.optimizer.analizer.spec
+package com.sumologic.tools.costs.ec2_ri.optimizer.analizer
 
 import org.scalatest._
 
