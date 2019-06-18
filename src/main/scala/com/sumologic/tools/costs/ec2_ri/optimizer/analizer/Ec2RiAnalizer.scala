@@ -39,14 +39,14 @@ class Ec2RiAnalizer(runningInstancesSummary: RunningInstancesSummary, reservedIn
     val totalReservationPrice = totalOverReservedFamiliesPrice - totalUnderReservedFamiliesPrice
 
     val possibleInputs = ListBuffer[(String, Double)]()
-    possibleInputs.addAll(overReservedFamiliesPrices.filter({
+    possibleInputs.appendAll(overReservedFamiliesPrices.filter({
       case (family: String, overSize: Double) => {
         familiesSizeDiffs.getOrElse(family, null) != null && familiesSizeDiffs.getOrElse(family, null).reservedConvertibleSize > 0.0
       }
     }).toSeq.sortWith(_._2 > _._2))
 
     val possibleOutputs = ListBuffer[(String, Double)]()
-    possibleOutputs.addAll(underReservedFamiliesPrices.filter({
+    possibleOutputs.appendAll(underReservedFamiliesPrices.filter({
       case (family: String, underSize: Double) => {
         familiesSizeDiffs.getOrElse(family, null) != null && familiesSizeDiffs.getOrElse(family, null).reservedConvertibleSize > 0.0
       }

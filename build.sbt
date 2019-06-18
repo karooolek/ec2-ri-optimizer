@@ -2,7 +2,7 @@ name := "ec2-ri-optimizer"
 
 version := "0.1"
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.12.0"
 
 libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.11.568"
 libraryDependencies += "org.json4s" %% "json4s-native" % "3.6.6"
