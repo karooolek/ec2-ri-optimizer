@@ -6,24 +6,17 @@ import org.scalatest._
 
 class Ec2RiAnalizerSpec extends FlatSpec with Matchers {
 
-  "A EC2 to RI analizer" should "give empty output for empty inputs" in {
+  "A EC2 to RI analizer" should "suggest no conversions for empty input" in {
     val ec2riAnalizer = new Ec2RiAnalizer(
       RunningInstancesSummary(
         Map[String, Double]()
       ),
       ReservedInstancesSummary(
-        Map[String, ReservedInstanceSummary]())
-
+        Map[String, ReservedInstanceSummary]()
+      )
     )
-    ec2riAnalizer.analize() shouldBe new Ec2RiAnalysis(
-      Map[String, Ec2RiSizeDiff](),
-      Map[String, Double](),
-      Map[String, Double](),
-      0.0,
-      0.0,
-      0.0,
-      Seq[Ec2RiConversion]()
-    )
+    val ec2RiAnalysis = ec2riAnalizer.analize()
+    ec2RiAnalysis.suggestedConversions.isEmpty shouldBe true
   }
 
   it should "suggest no conversions without under/over reserved instances" in {
@@ -43,7 +36,8 @@ class Ec2RiAnalizerSpec extends FlatSpec with Matchers {
         )
       )
     )
-    ec2riAnalizer.analize().suggestedConversions.isEmpty shouldBe true
+    val ec2RiAnalysis = ec2riAnalizer.analize()
+    ec2RiAnalysis.suggestedConversions.isEmpty shouldBe true
   }
 
   it should "suggest no conversions with overreserved m1 and without underreserved instances" in {
@@ -63,7 +57,8 @@ class Ec2RiAnalizerSpec extends FlatSpec with Matchers {
         )
       )
     )
-    ec2riAnalizer.analize().suggestedConversions.isEmpty shouldBe true
+    val ec2RiAnalysis = ec2riAnalizer.analize()
+    ec2RiAnalysis.suggestedConversions.isEmpty shouldBe true
   }
 
   it should "suggest no conversions without overreserved instances and with underreserved m1" in {
@@ -83,7 +78,8 @@ class Ec2RiAnalizerSpec extends FlatSpec with Matchers {
         )
       )
     )
-    ec2riAnalizer.analize().suggestedConversions.isEmpty shouldBe true
+    val ec2RiAnalysis = ec2riAnalizer.analize()
+    ec2RiAnalysis.suggestedConversions.isEmpty shouldBe true
   }
 
   it should "suggest m1->c1 conversion with overreserved m1 and underreserved c1" in {
@@ -103,7 +99,8 @@ class Ec2RiAnalizerSpec extends FlatSpec with Matchers {
         )
       )
     )
-    ec2riAnalizer.analize().suggestedConversions(0).input._1 shouldBe "m1"
-    ec2riAnalizer.analize().suggestedConversions(0).output._1 shouldBe "c1"
+    val ec2RiAnalysis = ec2riAnalizer.analize()
+    ec2RiAnalysis.suggestedConversions(0).input._1 shouldBe "m1"
+    ec2RiAnalysis.suggestedConversions(0).output._1 shouldBe "c1"
   }
 }
