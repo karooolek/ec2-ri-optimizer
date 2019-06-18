@@ -29,7 +29,7 @@ class AwsRunningInstancesDownloader(awsRegion: String, awsKey: String, awsSecret
       awsDescribeInstancesResponse = ec2client.describeInstances(new DescribeInstancesRequest().
         withNextToken(nextToken)
       )
-      runningInstances.addAll(awsDescribeInstancesResponse.getReservations.asScala.flatMap(
+      runningInstances.appendAll(awsDescribeInstancesResponse.getReservations.asScala.flatMap(
         awsReservation => awsReservation.getInstances.asScala.map(
           awsInstance => RunningInstance.fromAwsInstance(awsInstance)
         )
