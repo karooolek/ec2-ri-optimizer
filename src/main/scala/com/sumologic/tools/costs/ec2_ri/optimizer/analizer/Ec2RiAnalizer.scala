@@ -2,7 +2,6 @@ package com.sumologic.tools.costs.ec2_ri.optimizer.analizer
 
 import com.sumologic.tools.costs.ec2_ri.optimizer.reserved.ReservedInstancesSummary
 import com.sumologic.tools.costs.ec2_ri.optimizer.running.RunningInstancesSummary
-import com.sumologic.tools.costs.ec2_ri.optimizer.utils.AwsFamilyPriceNormalizator
 
 import scala.collection.mutable.ListBuffer
 
@@ -25,13 +24,13 @@ class Ec2RiAnalizer(runningInstancesSummary: RunningInstancesSummary, reservedIn
     val overReservedFamiliesPrices = familiesSizeDiffs.filter({
       case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => ec2riSizeDiff.reserved > ec2riSizeDiff.running
     }).map({
-      case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => (family, AwsFamilyPriceNormalizator.normalize(family) * (ec2riSizeDiff.reserved - ec2riSizeDiff.running))
+      case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => (family, ec2riSizeDiff.reserved - ec2riSizeDiff.running)
     })
 
     val underReservedFamiliesPrices = familiesSizeDiffs.filter({
       case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => ec2riSizeDiff.reserved < ec2riSizeDiff.running
     }).map({
-      case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => (family, AwsFamilyPriceNormalizator.normalize(family) * (ec2riSizeDiff.running - ec2riSizeDiff.reserved))
+      case (family: String, ec2riSizeDiff: Ec2RiSizeDiff) => (family, ec2riSizeDiff.running - ec2riSizeDiff.reserved)
     })
 
     val totalOverReservedFamiliesPrice = overReservedFamiliesPrices.values.sum
@@ -62,25 +61,23 @@ class Ec2RiAnalizer(runningInstancesSummary: RunningInstancesSummary, reservedIn
       val possibleOutputFamily = possibleOutput._1
       val possibleOutputSize = possibleOutput._2
 
-      val conversionFactor = AwsFamilyPriceNormalizator.normalize(possibleInputFamily) / AwsFamilyPriceNormalizator.normalize(possibleOutputFamily)
-
       if (possibleInputSize < possibleOutputSize) {
         suggestedConversions.append(Ec2RiConversion(
           possibleInputs.remove(0),
-          (possibleOutputFamily, possibleInputSize * conversionFactor)
+          (possibleOutputFamily, possibleInputSize)
         ))
 
         possibleOutputs.remove(0)
-        possibleOutputs.prepend((possibleOutputFamily, possibleOutputSize + possibleInputSize * conversionFactor))
+        possibleOutputs.prepend((possibleOutputFamily, possibleOutputSize + possibleInputSize))
         possibleOutputs.sortWith(_._2 > _._2)
       } else if (possibleInputSize > possibleOutputSize) {
         suggestedConversions.append(Ec2RiConversion(
-          (possibleInputFamily, possibleOutputSize / conversionFactor),
+          (possibleInputFamily, possibleOutputSize),
           possibleOutputs.remove(0)
         ))
 
         possibleInputs.remove(0)
-        possibleInputs.prepend((possibleInputFamily, possibleInputSize - possibleOutputSize / conversionFactor))
+        possibleInputs.prepend((possibleInputFamily, possibleInputSize - possibleOutputSize))
         possibleInputs.sortWith(_._2 > _._2)
       } else {
         suggestedConversions.append(Ec2RiConversion(
