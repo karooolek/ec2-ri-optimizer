@@ -10,9 +10,6 @@ import scala.io.Source
 
 object Main {
   def main(args: Array[String]): Unit = {
-
-
-
     //    val filename = args(0)
     //
     //    val totalRunninginstances = new ListBuffer[RunningInstance]()
