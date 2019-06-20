@@ -11,7 +11,7 @@ import com.sumologic.tools.costs.ri_ri.optimizer.ri.downloader.aws.AwsReservedIn
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
-class Ec2RiCostsOptimizer(accountsFilename: String) {
+class Ec2RiOptimizer(accountsFilename: String) {
   def analize(): Ec2RiAnalysis = {
     val totalRunninginstances = new ListBuffer[RunningInstance]()
     val totalReservedInstances = new ListBuffer[ReservedInstance]()
@@ -43,8 +43,8 @@ class Ec2RiCostsOptimizer(accountsFilename: String) {
 //  }
 }
 
-object Ec2RiCostsOptimizer {
+object Ec2RiOptimizer {
   def main(args: Array[String]): Unit = {
-    println(new Ec2RiCostsOptimizer(args(0)).analize().toJsonString);
+    println(new Ec2RiOptimizer(args(0)).analize().toJsonString);
   }
 }
